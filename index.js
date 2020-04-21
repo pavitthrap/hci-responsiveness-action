@@ -13,12 +13,39 @@ function run () {
     console.log('userRepo: ' + userRepo);
     console.log('username: ' + user.__user);
     console.log('repo fullname: ' + userRepo.__fullname);
+
+    // need to get username somehow
     var userIssues = github.getIssues('pavitthrap', repoName);
-    userIssues.listIssues()
+    userIssues.listIssues({state: 'open'})
         .then(function({data: issuesJson}) {
-            console.log('Num Issues: ' + issuesJson.length);
+            console.log('Open Issues: ' + issuesJson.length);
+
         }).catch(function(err) {
             console.log(err);
         });
+    userIssues.listIssues({state: 'closed'})
+        .then(function({data: issuesJson}) {
+            console.log('Closed Issues: ' + issuesJson.length);
+
+        }).catch(function(err) {
+            console.log(err);
+        });
+    userIssues.listIssues({state: 'all'})
+        .then(function({data: issuesJson}) {
+            console.log('All Issues: ' + issuesJson.length);
+
+        }).catch(function(err) {
+            console.log(err);
+        });
+    
+    // var date = new Date("April 10 2020 9:00");
+
+    // userIssues.listIssues({state: 'all'})
+    //     .then(function({data: issuesJson}) {
+    //         console.log('All Issues: ' + issuesJson.length);
+
+    //     }).catch(function(err) {
+    //         console.log(err);
+    //     });
 }
 run();
