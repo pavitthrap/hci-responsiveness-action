@@ -44,9 +44,11 @@ function run () {
 function handleIssues(issuesJson, userIssues) {
     var issue;
     var issueID;
-    for (i in issuesJson) {
+    console.log('in handleIssues function');
+    for (i = 0; i < issuesJson.length; i++) {
         issue = issuesJson[i];
         issueID = issue.id;
+        console.log(issueID);
         if(issueID < 30) {
             console.log('issueID: ' + issueID);
             console.log('issue State: ' + issue.state);
