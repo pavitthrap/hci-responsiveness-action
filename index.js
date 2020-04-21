@@ -26,26 +26,38 @@ function run () {
     userIssues.listIssues({state: 'closed'})
         .then(function({data: issuesJson}) {
             console.log('Closed Issues: ' + issuesJson.length);
-
         }).catch(function(err) {
             console.log(err);
         });
     userIssues.listIssues({state: 'all'})
         .then(function({data: issuesJson}) {
             console.log('All Issues: ' + issuesJson.length);
-
+            return handleIssues(issuesJson);
         }).catch(function(err) {
             console.log(err);
         });
     
-    // var date = new Date("April 10 2020 9:00");
+    var date = new Date("April 10 2020 9:00");
 
-    // userIssues.listIssues({state: 'all'})
-    //     .then(function({data: issuesJson}) {
-    //         console.log('All Issues: ' + issuesJson.length);
+}
 
-    //     }).catch(function(err) {
-    //         console.log(err);
-    //     });
+function handleIssues(issuesJson) {
+    var issue;
+    var issueID;
+    var userIssues = github.getIssues('pavitthrap', repoName);
+    for (i in issuesJson) {
+        issue = issuesJson[i];
+        issueID = issue.id;
+        if(issueID < 30) {
+            console.log('issueID: ' + issueID);
+            console.log('issue State: ' + issue.state);
+            userIssues.listIssueComments(issueID)
+                .then(function({data: commentsJson}) {
+                    console.log('Num comments: ' + commentsJson.length);
+                }).catch(function(err) {
+                    console.log(err);
+                });
+        }
+    }
 }
 run();
