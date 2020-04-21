@@ -32,7 +32,7 @@ function run () {
     userIssues.listIssues({state: 'all'})
         .then(function({data: issuesJson}) {
             console.log('All Issues: ' + issuesJson.length);
-            return handleIssues(issuesJson);
+            return handleIssues(issuesJson, userIssues);
         }).catch(function(err) {
             console.log(err);
         });
@@ -41,10 +41,9 @@ function run () {
 
 }
 
-function handleIssues(issuesJson) {
+function handleIssues(issuesJson, userIssues) {
     var issue;
     var issueID;
-    var userIssues = github.getIssues('pavitthrap', repoName);
     for (i in issuesJson) {
         issue = issuesJson[i];
         issueID = issue.id;
