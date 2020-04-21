@@ -2,7 +2,7 @@ var core = require('@actions/core');
 var Github = require('github-api');
 
 function run () {
-    const userToken  = core.getIntput('repo-token');
+    const userToken  = core.getInput('repo-token');
     var github = new Github({
         'token': userToken
     });
