@@ -49,16 +49,14 @@ function handleIssues(issuesJson, userIssues) {
         issue = issuesJson[i];
         issueID = issue.id;
         console.log(issueID);
-        if(issueID < 30) {
-            console.log('issueID: ' + issueID);
-            console.log('issue State: ' + issue.state);
-            userIssues.listIssueComments(issueID)
-                .then(function({data: commentsJson}) {
-                    console.log('Num comments: ' + commentsJson.length);
-                }).catch(function(err) {
-                    console.log(err);
-                });
-        }
+        console.log('issueID: ' + issueID);
+        console.log('issue State: ' + issue.state);
+        userIssues.listIssueComments(issueID)
+            .then(function({data: commentsJson}) {
+                console.log('Num comments: ' + commentsJson.length);
+            }).catch(function(err) {
+                console.log(err);
+            });
     }
 }
 run();
