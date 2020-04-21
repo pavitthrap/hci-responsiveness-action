@@ -6,8 +6,12 @@ function run () {
     var github = new Github({
         'token': userToken
     });
-    var repoUser = github.getUser();
-    console.log('success?');
+    var user = github.getUser();
+    var userRepos = user.listRepos(function(err, repos){
+        console.log('Number of repos: ' + userRepos.length);
+        userRepos.forEach(function(repo) {
+            console.log(repo);
+        })
+    });
 }
-
 run();
