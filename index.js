@@ -12,5 +12,10 @@ function run () {
     console.log('name of repo: ' + repoName);
     console.log('userRepo: ' + userRepo);
     console.log('type: ' + typeof(userRepo));
+    var userIssues = github.getIssues(user, userRepo);
+    userIssues.listIssues()
+        .then(function({data: issuesJson}) {
+            console.log('Num Issues: ' + issuesJson.length);
+        });
 }
 run();
