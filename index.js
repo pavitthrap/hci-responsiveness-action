@@ -11,8 +11,9 @@ function run () {
     var userRepo = github.getRepo(user, repoName);
     console.log('name of repo: ' + repoName);
     console.log('userRepo: ' + userRepo);
-    console.log('type: ' + typeof(userRepo));
-    var userIssues = github.getIssues(user, userRepo);
+    console.log('username: ' + user.username);
+    console.log('repo fullname: ' + userRepo.fullname);
+    var userIssues = github.getIssues(user.username, userRepo.fullname);
     userIssues.listIssues()
         .then(function({data: issuesJson}) {
             console.log('Num Issues: ' + issuesJson.length);
