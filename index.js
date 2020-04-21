@@ -13,13 +13,11 @@ function run () {
     console.log('userRepo: ' + userRepo);
     console.log('type: ' + typeof(userRepo));
     var userIssues = github.getIssues(user, userRepo);
-    userIssues.listIssues(function(err, issues){
-        if (err) {
-            console.log('err: ' + err);
-        } else {
-            console.log('length: ' + issues.length);
-        }
-    });
+    userIssues.listIssues()
+        .then(function({data: issuesJson}) {
+            console.log('Num Issues: ' + issuesJson.length);
+        }).catch(function(err) {
+            console.log(err);
+        });
 }
-
 run();
