@@ -8,7 +8,7 @@ function run () {
         'token': userToken
     });
     var user = github.getUser();
-    var userRepo = Github.getRepo(user, repoName);
+    var userRepo = github.getRepo(user, repoName);
     console.log('name of repo: ' + repoName);
     console.log('userRepo: ' + userRepo);
     console.log('type: ' + typeof(userRepo));
