@@ -40,14 +40,20 @@ function handleIssues(issuesJson, userIssues) {
     var issue;
     var issueID;
     var creationDate;
+    var numComments;
     console.log('in handleIssues function');
     for (i = 0; i < issuesJson.length; i++) {
         issue = issuesJson[i];
         issueID = issue.id;
         creationDate = issue.created_at;
+        numComments = issue.comments;
         if(i < 5) {
             console.log('issueID: ' + issueID);
             console.log('creationDate: ' + creationDate);
+            console.log('numComments: ' + numComments);
+        }
+        if(numComments > 0) {
+            console.log('numComments pulled: ' + numComments);
             userIssues.listIssueComments(issueID)
             .then(function({data: commentsJson}) {
                 console.log('Num comments: ' + commentsJson.length);
