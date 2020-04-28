@@ -4,6 +4,8 @@ var globalDate = new Date("07 April 2020 14:48 UTC");
 
 function run () {
     const userToken  = core.getInput('repo-token');
+
+    console.log('user token: ' + userToken);
     const repoName = core.getInput('repo-name');
     var github = new Github({
         'token': userToken
@@ -11,8 +13,10 @@ function run () {
     var user = github.getUser();
     var userRepo = github.getRepo(user, repoName);
 
+    // get
+
     // need to get username somehow
-    var userIssues = github.getIssues('pavitthrap', repoName);
+    var userIssues = github.getIssues('jadelyyy', repoName);
 
     // need to calculate date as well
     var formattedISODate = getISODate(globalDate);
@@ -47,11 +51,13 @@ function handleIssues(issuesJson, userIssues) {
         issueID = issue.id;
         creationDate = issue.created_at;
         numComments = issue.comments;
-        // if(i < 5) {
+
+         // if(i < 5) {
         //     console.log('issueID: ' + issueID);
         //     console.log('creationDate: ' + creationDate);
         //     console.log('numComments: ' + numComments);
         // }
+       
         if(numComments > 0) {
             console.log('numComments pulled: ' + numComments);
             console.log('pulling for issueID: ' + issueID);
@@ -65,4 +71,5 @@ function handleIssues(issuesJson, userIssues) {
         }
     }
 }
+
 run();
