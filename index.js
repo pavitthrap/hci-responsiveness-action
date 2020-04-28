@@ -10,10 +10,6 @@ function run () {
     });
     var user = github.getUser();
     var userRepo = github.getRepo(user, repoName);
-    console.log('name of repo: ' + repoName);
-    console.log('userRepo: ' + userRepo);
-    console.log('username: ' + user.__user);
-    console.log('repo fulname: ' + userRepo.__fullname);
 
     // need to get username somehow
     var userIssues = github.getIssues('pavitthrap', repoName);
@@ -43,19 +39,22 @@ function getISODate(date) {
 function handleIssues(issuesJson, userIssues) {
     var issue;
     var issueID;
+    var creationDate;
     console.log('in handleIssues function');
     for (i = 0; i < issuesJson.length; i++) {
         issue = issuesJson[i];
         issueID = issue.id;
-        console.log(issueID);
-        console.log('issueID: ' + issueID);
-        console.log('issue State: ' + issue.state);
-        userIssues.listIssueComments(issueID)
+        creationDate = issue.created_at;
+        if(i < 5) {
+            console.log('issueID: ' + issueID);
+            console.log('creationDate: ' + creationDate);
+            userIssues.listIssueComments(issueID)
             .then(function({data: commentsJson}) {
                 console.log('Num comments: ' + commentsJson.length);
             }).catch(function(err) {
                 console.log(err);
             });
+        }
     }
 }
 run();
