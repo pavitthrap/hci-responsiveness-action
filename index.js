@@ -47,19 +47,21 @@ function handleIssues(issuesJson, userIssues) {
         issueID = issue.id;
         creationDate = issue.created_at;
         numComments = issue.comments;
-        if(i < 5) {
-            console.log('issueID: ' + issueID);
-            console.log('creationDate: ' + creationDate);
-            console.log('numComments: ' + numComments);
-        }
+        // if(i < 5) {
+        //     console.log('issueID: ' + issueID);
+        //     console.log('creationDate: ' + creationDate);
+        //     console.log('numComments: ' + numComments);
+        // }
         if(numComments > 0) {
             console.log('numComments pulled: ' + numComments);
+            console.log('pulling for issueID: ' + issueID);
+            console.log(typeof(issueID));
             userIssues.listIssueComments(issueID)
-            .then(function({data: commentsJson}) {
-                console.log('Num comments: ' + commentsJson.length);
-            }).catch(function(err) {
-                console.log(err);
-            });
+                .then(function({data: commentsJson}) {
+                    console.log('Num comments: ' + commentsJson.length);
+                }).catch(function(err) {
+                    console.log(err);
+                });
         }
     }
 }
