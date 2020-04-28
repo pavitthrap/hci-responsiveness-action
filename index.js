@@ -1,6 +1,6 @@
 var core = require('@actions/core');
 var Github = require('github-api');
-var globalDate = new Date("April 10 2020 9:00");
+var globalDate = new Date("01 April 2020 14:48 UTC");
 
 function run () {
     const userToken  = core.getInput('repo-token');
@@ -27,16 +27,12 @@ function run () {
 }
 
 function getISODate(date) {
-    var requestable = new Requestable();
-    requestable._dateToISO(date)
-        .then(function(formattedDate){
-            return formattedDate;
-        }).catch(function(err) {
-            console.log(err);
-        });
+    return date.toISOString();
 }
+
 function handleIssues(issuesJson, userIssues) {
     var date = getISODate(globalDate);
+    
     console.log('returned date is: ' + date);
     var issue;
     var issueID;
