@@ -1,5 +1,6 @@
 var core = require('@actions/core');
 var Github = require('github-api');
+var globalDate = new Date("April 10 2020 9:00");
 
 function run () {
     const userToken  = core.getInput('repo-token');
@@ -12,23 +13,10 @@ function run () {
     console.log('name of repo: ' + repoName);
     console.log('userRepo: ' + userRepo);
     console.log('username: ' + user.__user);
-    console.log('repo fullname: ' + userRepo.__fullname);
+    console.log('repo fulname: ' + userRepo.__fullname);
 
     // need to get username somehow
     var userIssues = github.getIssues('pavitthrap', repoName);
-    userIssues.listIssues({state: 'open'})
-        .then(function({data: issuesJson}) {
-            console.log('Open Issues: ' + issuesJson.length);
-
-        }).catch(function(err) {
-            console.log(err);
-        });
-    userIssues.listIssues({state: 'closed'})
-        .then(function({data: issuesJson}) {
-            console.log('Closed Issues: ' + issuesJson.length);
-        }).catch(function(err) {
-            console.log(err);
-        });
     userIssues.listIssues({state: 'all'})
         .then(function({data: issuesJson}) {
             console.log('All Issues: ' + issuesJson.length);
@@ -36,12 +24,20 @@ function run () {
         }).catch(function(err) {
             console.log(err);
         });
-    
-    var date = new Date("April 10 2020 9:00");
-
 }
 
+function getISODate(date) {
+    var requestable = new Requestable();
+    requestable._dateToISO(date)
+        .then(function(formattedDate){
+            return formattedDate;
+        }).catch(function(err) {
+            console.log(err);
+        });
+}
 function handleIssues(issuesJson, userIssues) {
+    var date = getISODate(globalDate);
+    console.log('returned date is: ' + date);
     var issue;
     var issueID;
     console.log('in handleIssues function');
