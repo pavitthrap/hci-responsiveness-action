@@ -1,6 +1,6 @@
 var core = require('@actions/core');
 var Github = require('github-api');
-var globalDate = new Date("01 April 2020 14:48 UTC");
+var globalDate = new Date("07 April 2020 14:48 UTC");
 
 function run () {
     const userToken  = core.getInput('repo-token');
@@ -17,7 +17,17 @@ function run () {
 
     // need to get username somehow
     var userIssues = github.getIssues('pavitthrap', repoName);
-    userIssues.listIssues({state: 'all'})
+
+    // need to calculate date as well
+    var formattedISODate = getISODate(globalDate);
+    console.log('date: ' + formattedISODate);
+
+    var issueOptions = {
+        state: 'all',
+        since: formattedISODate
+    }
+
+    userIssues.listIssues(issueOptions)
         .then(function({data: issuesJson}) {
             console.log('All Issues: ' + issuesJson.length);
             return handleIssues(issuesJson, userIssues);
@@ -31,9 +41,6 @@ function getISODate(date) {
 }
 
 function handleIssues(issuesJson, userIssues) {
-    var date = getISODate(globalDate);
-    
-    console.log('returned date is: ' + date);
     var issue;
     var issueID;
     console.log('in handleIssues function');
