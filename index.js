@@ -1,75 +1,61 @@
-var core = require('@actions/core');
-var Github = require('github-api');
-var globalDate = new Date("07 April 2020 14:48 UTC");
+const { Octokit } = require("@octokit/rest");
+const core = require("@actions/core");
+const github = require("@actions/github");
+
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+
+function getIssueComments(octokit, repoOwner, repoName, issueID) {
+    return __awaiter(this, void 0, void 0, function* () {
+        console.log('getting comments...\n');
+        const {data: comments} = yield octokit.issues.listComments({
+            owner: repoOwner,
+            repo: repoName,
+            issue_number: issueID,
+        });
+
+        console.log('in function numComments: ' + comments.length);
+        return comments.length;
+    });
+}
 
 function run () {
-    const userToken  = core.getInput('repo-token');
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const userToken  = core.getInput('repo-token');
+            const repoName = core.getInput('repo-name');
+            const repoOwner = 'pavitthrap';
 
-    console.log('user token: ' + userToken);
-    const repoName = core.getInput('repo-name');
-    var github = new Github({
-        'token': userToken
-    });
-    var user = github.getUser();
-    var userRepo = github.getRepo(user, repoName);
+            var octokit = new github.GitHub(userToken);
 
-    // get
+            const {data: issues} = yield octokit.issues.listForRepo({
+                owner: repoOwner,
+                repo: repoName,
+            });
 
-    // need to get username somehow
-    var userIssues = github.getIssues('jadelyyy', repoName);
+            console.log('num issues: ' + issues.length);
 
-    // need to calculate date as well
-    var formattedISODate = getISODate(globalDate);
-    console.log('date: ' + formattedISODate);
+            var issue;
+            var issueID;
+            var numComments;
+            for (var i = 0; i < issues.length; i++) {
+                issue = issues[i];
+                issueID = issue.id;
+                console.log('current issueID: ' + issueID);
+                numComments = yield getIssueComments(octokit, repoOwner, repoName, issueID);
+                console.log('numComments: ' + numComments);
+            }
 
-    var issueOptions = {
-        state: 'all',
-        since: formattedISODate
-    }
-
-    userIssues.listIssues(issueOptions)
-        .then(function({data: issuesJson}) {
-            console.log('All Issues: ' + issuesJson.length);
-            return handleIssues(issuesJson, userIssues);
-        }).catch(function(err) {
+        } catch(err) {
             console.log(err);
-        });
-}
-
-function getISODate(date) {
-    return date.toISOString();
-}
-
-function handleIssues(issuesJson, userIssues) {
-    var issue;
-    var issueID;
-    var creationDate;
-    var numComments;
-    console.log('in handleIssues function');
-    for (i = 0; i < issuesJson.length; i++) {
-        issue = issuesJson[i];
-        issueID = issue.id;
-        creationDate = issue.created_at;
-        numComments = issue.comments;
-
-         // if(i < 5) {
-        //     console.log('issueID: ' + issueID);
-        //     console.log('creationDate: ' + creationDate);
-        //     console.log('numComments: ' + numComments);
-        // }
-       
-        if(numComments > 0) {
-            console.log('numComments pulled: ' + numComments);
-            console.log('pulling for issueID: ' + issueID);
-            console.log(typeof(issueID));
-            userIssues.listIssueComments(issueID)
-                .then(function({data: commentsJson}) {
-                    console.log('Num comments: ' + commentsJson.length);
-                }).catch(function(err) {
-                    console.log(err);
-                });
         }
-    }
+    });
 }
 
 run();
